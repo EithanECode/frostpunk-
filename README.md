@@ -1,135 +1,242 @@
-# Frostpunk - Gestión de Recursos
+# 🎮 Frostpunk - Gestión de Recursos
 
-Un videojuego de gestión de recursos inspirado en Frostpunk, desarrollado con Python y Pygame con gráficos pixel art y sistema de persistencia con Supabase.
+Un videojuego de gestión de recursos inspirado en Frostpunk, desarrollado con Python, Pygame y Supabase. Gestiona tu colonia en un mundo helado, construye edificios, recolecta recursos y compite en la tabla de puntuaciones global.
 
-## Características
+## 🌟 Características Principales
 
-- **Gestión de Recursos**: Administra carbón, madera y comida (frutas)
-- **Sistema de Trabajadores**: Los ciudadanos trabajan automáticamente en edificios
-- **Construcción de Edificios**: Construye minas, aserraderos, granjas, casas y almacenes
-- **Efectos del Clima**: La temperatura afecta la producción y salud de trabajadores
-- **Interfaz Pixel Art**: Gráficos simples pero efectivos con estética pixel art
-- **Contadores en Tiempo Real**: Monitorea tus recursos y población
-- **Ciclo Día/Noche**: Sistema realista de trabajo y descanso
-- **Sistema de Refugio**: Los aldeanos buscan refugio automáticamente cuando su salud es baja
-- **Persistencia de Datos**: Guardado automático y estadísticas con Supabase
-- **Tabla de Puntuaciones**: Compite con otros jugadores
+### 🏗️ **Sistema de Construcción Avanzado**
+- **Menú de construcción** con costos de materiales
+- **5 tipos de edificios**: Mina de Carbón, Aserradero, Granja, Casa, Almacén
+- **Validación de recursos** antes de construir
+- **Posicionamiento inteligente** que evita superposiciones
 
-## Instalación
+### 👥 **Gestión de Trabajadores Inteligente**
+- **Selección manual** de aldeanos (click izquierdo)
+- **Asignación de tareas** específicas (click derecho)
+- **Estados visuales**: trabajando, comiendo, descansando, recolectando, en refugio
+- **Sistema de refugio automático** cuando la salud es baja
 
-1. **Instalar Python** (versión 3.7 o superior)
-2. **Instalar dependencias**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 🌡️ **Sistema de Clima Realista**
+- **Ciclo día/noche** (6:00 AM - 6:00 PM trabajo, 6:01 PM - 5:59 AM descanso)
+- **Efectos de temperatura**:
+  - 15-35°C: Sin daño
+  - 5-14°C: -5 vida cada 2 segundos
+  - -15°C a 4°C: -10 vida cada 3 segundos
+  - < -15°C: -15 vida cada 2 segundos
+- **Protección en casas**: No hay daño cuando están refugiados
 
-## Configuración de Supabase (Opcional)
+### 🌳 **Sistema de Recursos Sostenible**
+- **Árboles duraderos** (200 unidades de madera cada uno)
+- **Regeneración automática** de árboles
+- **Máximo 12 árboles** en el mapa
+- **Recolección manual** y automática
 
-Para habilitar el sistema de persistencia y leaderboard:
+### 💾 **Persistencia de Datos con Supabase**
+- **Guardado automático** cada minuto
+- **Tabla de puntuaciones** global
+- **Estadísticas detalladas** de cada partida
+- **Análisis de rendimiento** de jugadores
 
-1. **Crear proyecto en Supabase**:
-   - Ve a [supabase.com](https://supabase.com)
-   - Crea un nuevo proyecto
-   - Copia la URL y la clave anónima
+## 🚀 Instalación
 
-2. **Configurar variables de entorno**:
+### 1. **Requisitos Previos**
+- Python 3.7 o superior
+- Cuenta en Supabase (gratuita)
+
+### 2. **Clonar e Instalar**
+```bash
+# Clonar el repositorio
+git clone <tu-repositorio>
+cd Tunel
+
+# Crear entorno virtual
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+```
+
+### 3. **Configurar Supabase**
+
+#### A. Crear Proyecto en Supabase
+1. Ve a [supabase.com](https://supabase.com)
+2. Crea una cuenta o inicia sesión
+3. Crea un nuevo proyecto
+4. Anota tu **URL del proyecto** y **API Key**
+
+#### B. Configurar Base de Datos
+1. En tu proyecto de Supabase, ve a **SQL Editor**
+2. Copia y pega todo el contenido del archivo `database_schema.sql`
+3. Ejecuta el SQL para crear las tablas
+
+#### C. Configurar Variables de Entorno
+1. Copia el archivo de configuración:
    ```bash
    cp config.env.example .env
    ```
-   Edita el archivo `.env` con tus credenciales:
+
+2. Edita el archivo `.env` con tus credenciales:
+   ```env
+   SUPABASE_URL=https://tu-proyecto.supabase.co
+   SUPABASE_KEY=tu-anon-key-aqui
+   GAME_AUTO_SAVE_INTERVAL=60
+   ENABLE_ANALYTICS=true
    ```
-   SUPABASE_URL=tu_url_de_supabase
-   SUPABASE_KEY=tu_clave_anonima
-   ```
 
-3. **Crear tablas en Supabase**:
-   - Ve al editor SQL de tu proyecto
-   - Copia y ejecuta el contenido de `database_schema.sql`
+## 🎮 Cómo Jugar
 
-## Cómo Jugar
-
-### Controles
-- **B**: Menú de construcción
-- **L**: Tabla de puntuaciones (leaderboard)
-- **Click izquierdo**: Seleccionar trabajador o edificio
-- **Click derecho**: Asignar tarea al trabajador seleccionado
+### **Controles Principales**
+- **B**: Abrir/cerrar menú de construcción
+- **L**: Mostrar tabla de puntuaciones (leaderboard)
+- **ESC**: Salir del juego o cerrar menús
 - **↑↓**: Navegar en menús
 - **Enter**: Confirmar selección
-- **ESC**: Salir
 
-### Mecánicas del Juego
+### **Controles de Trabajadores**
+- **Click izquierdo**: Seleccionar trabajador
+- **Click derecho en árbol**: Asignar trabajador a recolectar madera
+- **Click derecho en edificio**: Asignar trabajador a trabajar
 
-#### Recursos
-- **Carbón**: Necesario para calefacción y energía
-- **Madera**: Usado para construcción y herramientas
-- **Comida**: Vital para la supervivencia de los trabajadores
+### **Mecánicas del Juego**
 
-#### Trabajadores
-- Los trabajadores se asignan automáticamente a edificios disponibles
-- Tienen estados: trabajando, comiendo, descansando, inactivo, recolectando, buscando refugio, en refugio
-- La salud y energía se ven afectadas por el frío y el hambre
-- Buscan refugio automáticamente cuando su salud llega a 20 puntos
+#### 🏗️ **Construcción de Edificios**
+| Edificio | Costo | Trabajadores | Producción |
+|----------|-------|--------------|------------|
+| Casa | 10 madera | 0 | Refugio |
+| Aserradero | 15 madera | 2 | Madera |
+| Mina de Carbón | 20 madera | 3 | Carbón |
+| Granja | 12 madera | 4 | Comida |
+| Almacén | 8 madera | 0 | Almacenamiento |
 
-#### Edificios
-- **Mina de Carbón**: Produce carbón (máximo 3 trabajadores)
-- **Aserradero**: Produce madera (máximo 2 trabajadores)
-- **Granja**: Produce comida (máximo 4 trabajadores)
-- **Casa**: Proporciona refugio (necesita calefacción)
-- **Almacén**: Almacena recursos
+#### 🌳 **Sistema de Árboles**
+- Cada árbol tiene **200 unidades de madera**
+- Los trabajadores extraen **1 unidad por "golpe"**
+- Los árboles se **regeneran automáticamente** después de agotarse
+- **Máximo 12 árboles** en el mapa
 
-#### Clima y Refugio
-- La temperatura varía cada día
-- El frío afecta la producción de edificios que necesitan calefacción
-- Se consume carbón automáticamente para calefacción cuando hace frío
-- Los aldeanos buscan refugio automáticamente cuando su salud es baja
-- En el refugio recuperan 20 puntos de vida cada 5 segundos
+#### 👥 **Estados de Trabajadores**
+- 🟢 **Verde**: Trabajando en edificio
+- 🟠 **Naranja**: Comiendo
+- 🔵 **Azul**: Descansando
+- 🟤 **Marrón**: Recolectando madera
+- 🔴 **Rojo**: Buscando refugio (emergencia)
+- 🔵 **Azul claro**: En refugio (curándose)
 
-#### Árboles
-- 12 árboles máximo en el mapa
-- Cada árbol tiene 200 unidades de madera
-- Los trabajadores extraen 1 unidad por "golpe"
-- Los árboles se regeneran automáticamente
+#### 🌡️ **Sistema de Refugio**
+- Los trabajadores buscan refugio automáticamente cuando su vida llega a **20 puntos**
+- En las casas **no reciben daño** por temperatura
+- Se recuperan **+20 puntos de vida cada 5 segundos**
+- Vuelven al trabajo cuando están completamente curados
 
-## Ejecutar el Juego
+## 📊 Sistema de Puntuaciones
 
-```bash
-python game.py
+### **Criterios de Puntuación**
+- **Días sobrevividos** (principal)
+- **Trabajadores vivos**
+- **Edificios construidos**
+- **Recursos totales producidos**
+
+### **Leaderboard Global**
+- Presiona **L** para ver la tabla de puntuaciones
+- Muestra los **10 mejores jugadores**
+- Se actualiza en tiempo real
+- Compara tu rendimiento con otros jugadores
+
+## 💾 Persistencia de Datos
+
+### **Datos Guardados Automáticamente**
+- **Cada minuto**: Estadísticas de recursos y trabajadores
+- **Al construir**: Eventos de construcción
+- **Al finalizar**: Estadísticas completas de la partida
+
+### **Tablas en Supabase**
+- `games`: Partidas completas
+- `resource_stats`: Estadísticas de recursos por tiempo
+- `building_events`: Eventos de construcción
+- `worker_stats`: Estadísticas de trabajadores
+- `game_events`: Logs de eventos del juego
+
+## 🔧 Configuración Avanzada
+
+### **Variables de Entorno**
+```env
+# Supabase Configuration
+SUPABASE_URL=https://tu-proyecto.supabase.co
+SUPABASE_KEY=tu-anon-key-aqui
+
+# Game Configuration
+GAME_AUTO_SAVE_INTERVAL=60  # Guardar cada 60 segundos
+ENABLE_ANALYTICS=true       # Habilitar análisis
 ```
 
-## Sistema de Persistencia
+### **Modo Local**
+Si no configuras Supabase, el juego funciona completamente en modo local:
+- ⚠️ `⚠️ Supabase no configurado. Ejecutando en modo local.`
+- 🎮 Todas las funcionalidades del juego disponibles
+- 💾 Solo no se guardan datos en la nube
 
-### Datos Guardados Automáticamente
-- **Sesiones de juego**: Inicio, fin, duración, recursos finales
-- **Estadísticas de recursos**: Evolución de recursos por día/hora
-- **Eventos de construcción**: Cada edificio construido
-- **Estadísticas de trabajadores**: Salud, energía, tiempo trabajando
-- **Tabla de puntuaciones**: Ranking de mejores jugadores
+## 🏆 Estrategias de Juego
 
-### Funcionalidades Online
-- **Guardado automático**: Cada minuto de juego
-- **Leaderboard**: Top 10 jugadores
-- **Estadísticas**: Análisis de rendimiento
-- **Persistencia**: Continuar partidas guardadas
+### **Primeros Pasos**
+1. **Construye casas** para proteger a tus trabajadores
+2. **Recolecta madera** de los árboles
+3. **Construye aserraderos** para producción automática
+4. **Mantén carbón** para calefacción en invierno
 
-## Estructura del Código
+### **Gestión de Recursos**
+- **Carbón**: Vital para calefacción en temperaturas bajas
+- **Madera**: Necesaria para construcción y herramientas
+- **Comida**: Mantiene a los trabajadores saludables
 
-- `GameState`: Maneja el estado global del juego
-- `Worker`: Clase para los trabajadores con IA básica
-- `Building`: Clase para los edificios y su producción
-- `Tree`: Clase para los árboles recolectables
-- `UI`: Interfaz de usuario con contadores
-- `BuildMenu`: Menú de construcción con costos
-- `Leaderboard`: Tabla de puntuaciones
-- `SupabaseManager`: Gestión de persistencia de datos
-- `Game`: Clase principal que maneja el bucle del juego
+### **Supervivencia a Largo Plazo**
+- **Monitorea la temperatura** constantemente
+- **Construye múltiples casas** para refugio
+- **Equilibra producción** y consumo de recursos
+- **Asigna trabajadores** estratégicamente
 
-## Desafíos del Juego
+## 🐛 Solución de Problemas
 
-1. **Gestión de Recursos**: Mantén un equilibrio entre producción y consumo
-2. **Supervivencia en el Frío**: Asegúrate de tener suficiente carbón para calefacción
-3. **Expansión**: Construye más edificios para aumentar la producción
-4. **Eficiencia**: Optimiza la asignación de trabajadores
-5. **Refugio**: Mantén a tus aldeanos seguros del frío
-6. **Competencia**: Compite por el mejor puntaje en el leaderboard
+### **Error de Conexión a Supabase**
+```
+❌ Error conectando a Supabase: Client.__init__() got an unexpected keyword argument 'proxy'
+```
+**Solución**: Actualiza la versión de supabase:
+```bash
+pip install "supabase>=2.4.0"
+```
 
-¡Disfruta gestionando tu colonia en el mundo helado y compitiendo con otros jugadores! 
+### **Error de Variables de Entorno**
+```
+⚠️ Supabase no configurado. Ejecutando en modo local.
+```
+**Solución**: Verifica que el archivo `.env` esté configurado correctamente
+
+### **Error de Base de Datos**
+```
+❌ Error creando sesión de juego
+```
+**Solución**: Ejecuta el SQL de `database_schema.sql` en Supabase
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📝 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+## 🙏 Agradecimientos
+
+- Inspirado en el juego **Frostpunk** de 11 bit studios
+- Desarrollado con **Python** y **Pygame**
+- Base de datos en la nube con **Supabase**
+- Gráficos pixel art originales
+
+---
+
+**¡Disfruta gestionando tu colonia en el mundo helado!** ❄️🏗️👥 
